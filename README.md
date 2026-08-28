@@ -1,4 +1,4 @@
-- [简体中文](README.zh-CN.md) · [Русский](README.ru.md)
+- [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [Русский](README.ru.md) · [한국어](README.ko.md) · [Español](README.es.md) · [Français](README.fr.md) · [Svenska](README.sv.md) · [Deutsch](README.de.md)
 
 # mc-161807 (Pre-Classic)
 Development phase: May 16, 2009 (until 18:07 UTC+2)
