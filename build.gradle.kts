@@ -20,17 +20,16 @@ dependencies {
     natives(group = "org.lwjgl.lwjgl", name = "lwjgl-platform", version = "2.9.3", classifier = "natives-osx")
 }
 
-
-task("run", JavaExec::class) {
-    jvmArgs = listOf("-Dorg.lwjgl.librarypath=${project.projectDir.toPath()}\\run\\natives")
-    main = "com.mojang.minecraft.Minecraft"
-    classpath = sourceSets["main"].runtimeClasspath
-    workingDir("${project.projectDir.toPath()}\\run")
-    dependsOn("extractNatives")
-}
-
-task("extractNatives", Copy::class) {
+tasks.register<Copy>("extractNatives") {
     dependsOn(natives)
     from(natives.map { zipTree(it) })
-    into("${project.projectDir.toPath()}\\run\\natives")
+    into(project.file("run/natives"))
+}
+
+tasks.register<JavaExec>("run") {
+    jvmArgs = listOf("-Dorg.lwjgl.librarypath=${project.file("run/natives").absolutePath}")
+    mainClass.set("com.mojang.minecraft.Minecraft")
+    classpath = sourceSets["main"].runtimeClasspath
+    workingDir = project.file("run")
+    dependsOn("extractNatives")
 }
