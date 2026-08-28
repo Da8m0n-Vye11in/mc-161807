@@ -3,8 +3,7 @@ name: Gradle Build
 on:
   push:
     branches: [ 'fix/compile-errors' ]
-  pull_request:
-    branches: [ 'master' ]
+  workflow_dispatch: {}
 
 jobs:
   build:
@@ -23,5 +22,19 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew || true
 
-      - name: Build with Gradle
-        run: ./gradlew clean build --no-daemon
+      - name: Run Gradle build and save logs
+        run: |
+          set -e
+          chmod +x ./gradlew || true
+          echo "Running Gradle build, saving output to build.log"
+          ./gradlew clean build --no-daemon > build.log 2>&1 || true
+          echo "Gradle exit code: $?" > exitcode.txt
+
+      - name: Upload build logs and artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            build.log
+            exitcode.txt
+            build/libs/**
